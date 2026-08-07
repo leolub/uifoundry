@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, Geist, ui-sans-serif, system-ui, sans-serif;
+  color-scheme: dark;
+  --bg: #0b0c0f;
+  --surface-1: #121318;
+  --surface-2: #191b21;
+  --surface-3: #20232a;
+  --border: #2a2d34;
+  --text: #f4f4f5;
+  --text-muted: #9b9da5;
+  --primary: #e63b3b;
+  --primary-hover: #ff4d45;
+  --accent-cyan: #37c6d0;
+  --success: #63c174;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    background: var(--bg);
+  }
+
+  button,
+  a {
+    outline-offset: 3px;
+  }
+}
+
+@layer utilities {
+  .bg-bg { background-color: var(--bg); }
+  .bg-surface-1 { background-color: var(--surface-1); }
+  .bg-surface-2 { background-color: var(--surface-2); }
+  .bg-primary { background-color: var(--primary); }
+  .hover\:bg-primary-hover:hover { background-color: var(--primary-hover); }
+  .text-text { color: var(--text); }
+  .text-text-muted { color: var(--text-muted); }
+  .text-primary { color: var(--primary); }
+  .text-accent-cyan { color: var(--accent-cyan); }
+  .text-success { color: var(--success); }
+  .border-border { border-color: var(--border); }
+}
+

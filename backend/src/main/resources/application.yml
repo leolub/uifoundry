@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: uifoundry-api
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/uifoundry}
+    username: ${DATABASE_USERNAME:uifoundry}
+    password: ${DATABASE_PASSWORD:uifoundry_local_only}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+
+server:
+  port: ${PORT:8080}
+  error:
+    include-stacktrace: never
+

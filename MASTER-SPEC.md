@@ -43,7 +43,7 @@ All four paths normalize to the same internal representation:
 
 ### AI
 - Primary provider: **Google Gemini API**
-- Default model: configurable through `AI_MODEL`; initial recommendation `gemini-2.5-flash`
+- Default model: configurable through `GEMINI_MODEL`; validated default `gemini-3.6-flash`
 - V1 implementation: Gemini provider only
 - Architecture: provider interface so OpenAI or another model can be added later without changing controllers or project/version logic
 - No OpenAI API key is deployed by default
@@ -243,4 +243,3 @@ The project is considered resume-ready when all of the following are true:
 17. CI runs backend and frontend checks.
 18. Hosted frontend/backend/database are reachable through public URLs.
 19. README accurately describes architecture, setup, limitations, and deployment.
-

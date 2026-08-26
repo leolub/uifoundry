@@ -15,6 +15,13 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(GenerationApiException.class)
+    ResponseEntity<ApiError> handleGenerationApi(
+            GenerationApiException exception, HttpServletRequest request) {
+        return ResponseEntity.status(exception.getStatus()).body(new ApiError(
+                exception.getCode(), exception.getMessage(), request.getRequestId(), null));
+    }
+
     @ExceptionHandler(SourceImageNotFoundException.class)
     ResponseEntity<ApiError> handleSourceImageNotFound(
             SourceImageNotFoundException exception, HttpServletRequest request) {

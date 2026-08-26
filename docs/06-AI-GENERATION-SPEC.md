@@ -5,10 +5,17 @@
 V1 provider: Gemini.
 
 Configuration:
-- `AI_PROVIDER=GEMINI`
-- `AI_MODEL=gemini-2.5-flash` initially
+- `GEMINI_API_KEY` (optional at startup; required only when generating)
+- `GEMINI_MODEL=gemini-3.6-flash` (validated with image input over the v1beta API)
+- `GEMINI_TIMEOUT_SECONDS=90`
 
 Do not hard-code the model string in controller code.
+
+Phase 4A uses Spring's built-in synchronous REST client against Gemini's
+`generateContent` endpoint rather than adding an SDK dependency. One request
+contains the prompt text and one inline Base64 image part. `generationConfig`
+requests `application/json` with a response schema matching the JSON contract.
+There are no automatic retries, repair calls, or generation-on-load behavior.
 
 ## 2. Credential Modes
 
@@ -111,6 +118,11 @@ Maintain prompt templates as versioned source files/classes.
 Record a prompt version string in `ai_runs` metadata if convenient.
 
 Do not edit prompts ad hoc in controllers.
+
+The implemented template is
+`backend/src/main/resources/prompts/screenshot-to-react-v1.txt`, with prompt
+version `screenshot-to-react-v1`. Optional user instructions are appended as a
+separate labeled section and limited to 2,000 characters.
 
 ## 11. Recommended Initial Prompt Strategy
 

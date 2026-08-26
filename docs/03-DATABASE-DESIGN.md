@@ -78,7 +78,38 @@ The same `storage_key` boundary can later address Cloudflare R2 without changing
 the controller or persisted public metadata. Never store Figma PAT or AI API key
 in source metadata.
 
-## 5. `project_versions`
+## 5. `generations` (implemented in Phase 4A)
+
+Each initial generation is an immutable run record and is the foundation for
+future refinement history.
+
+| Column | Type | Notes |
+|---|---|---|
+| id | uuid PK | application generated |
+| project_id | uuid FK | cascades on project deletion; indexed with created time |
+| status | varchar | RUNNING/SUCCEEDED/FAILED |
+| provider | varchar | currently GEMINI |
+| model | varchar | configured model name |
+| instruction | varchar nullable | optional, maximum 2,000 characters |
+| summary | text nullable | structured provider result summary |
+| created_at | timestamptz | |
+| completed_at | timestamptz nullable | |
+| error_message | varchar nullable | sanitized; never an upstream body or stack trace |
+
+## 6. `generation_files` (implemented in Phase 4A)
+
+| Column | Type | Notes |
+|---|---|---|
+| id | uuid PK | application generated |
+| generation_id | uuid FK | cascades on generation deletion |
+| path | varchar | unique per generation; validated `src/` path |
+| content | text | generated TypeScript/TSX/CSS source |
+| created_at | timestamptz | |
+
+Generated files remain database text in this phase. They are never written to
+the source-image filesystem and are not executed by the backend.
+
+## 7. `project_versions` (future)
 
 Immutable snapshots.
 
@@ -95,7 +126,7 @@ Immutable snapshots.
 
 Constraint: unique `(project_id, version_number)`.
 
-## 6. `ai_runs`
+## 8. `ai_runs` (future quota/accounting expansion)
 
 Tracks usage, status, errors, and quota accounting.
 
@@ -127,11 +158,11 @@ Indexes:
 - `(request_ip_hash, started_at)` for abuse throttling
 - `(started_at, credential_mode)` for global quota
 
-## 7. Guest Cleanup
+## 9. Guest Cleanup
 
 A scheduled cleanup job deletes guest projects whose `expires_at` is in the past. Cleanup follows the same DB/R2 deletion rules as explicit project deletion. Failure to delete an R2 object is logged for later cleanup.
 
-## 8. Deletion Behavior
+## 10. Deletion Behavior
 
 Deleting a project:
 1. authorize owner;
@@ -140,7 +171,7 @@ Deleting a project:
 4. generated code snapshots are deleted through cascade;
 5. failure to delete R2 object must be logged for cleanup but should not resurrect DB data.
 
-## 9. JSONB File Format
+## 11. JSONB File Format
 
 Recommended format:
 

@@ -16,5 +16,8 @@ frontend/.vite/
 backend/target/
 /storage/
 /backend/storage/
+/logs/
+backend/src/main/resources/application-local.yml
+backend/src/main/resources/application-local.yaml
 
 *.log

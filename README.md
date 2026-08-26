@@ -23,10 +23,10 @@ project keeps independent history, issues, deployment, and secrets.
 
 ## Current phase
 
-Phase 1 repository scaffold is in place: a baseline dark UI, backend health
-endpoint, PostgreSQL service, Docker configuration, and CI checks. Product
-features such as authentication, project persistence, AI generation, and
-external integrations belong to later phases in `docs/10-DEVELOPMENT-PLAN.md`.
+Phase 4A is implemented: authenticated users can manage projects, upload a
+protected source screenshot, explicitly generate structured React/TypeScript/
+Tailwind files through Gemini, and reload the latest generated code. Generated
+code is currently read-only; Sandpack preview and Monaco editing are later phases.
 
 ## Prerequisites
 
@@ -52,6 +52,16 @@ docker compose up -d postgres
 cd backend
 mvn spring-boot:run
 ```
+
+The UIFoundry PostgreSQL container is exposed on host port `5433` to avoid
+conflicts with an existing local PostgreSQL installation. Spring Boot's local
+default is `jdbc:postgresql://localhost:5433/uifoundry`; containers continue to
+use PostgreSQL's internal port `5432`.
+
+To make a real generation request, set `GEMINI_API_KEY` in the ignored local
+`.env`/process environment. `GEMINI_MODEL` defaults to `gemini-3.6-flash` and is
+configurable. The backend and automated tests work without an API key; tests use
+a deterministic provider replacement and never call Gemini.
 
 Or start the complete scaffold:
 

@@ -46,8 +46,18 @@ Requirements:
 }
 ```
 
+## Implemented Phase 4A Contract
+
+The active versioned resource is `screenshot-to-react-v1.txt`. Gemini structured
+output is constrained to the contract above. Before persistence, the backend
+requires `src/App.tsx`, permits only `.ts`, `.tsx`, and `.css` beneath `src/`,
+rejects traversal/absolute/duplicate paths, permits at most 10 total files, and
+limits total source content to 500,000 characters. The screenshot remains the
+primary input; the optional supplementary instruction is capped at 2,000
+characters.
+
 ## Repair Strategy
-If parse/validation fails:
-- first perform deterministic cleanup if harmless (e.g. remove accidental markdown fence);
-- otherwise at most one repair AI request is allowed if quota mode permits;
-- do not create an open-ended agent loop.
+Phase 4A performs no repair request. Malformed or unsafe output marks the
+generation `FAILED` and returns a sanitized error. A bounded repair strategy may
+be considered later with explicit quota accounting; open-ended loops remain
+forbidden.

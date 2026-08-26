@@ -118,38 +118,26 @@ Returns metadata and signed/temporary asset URL as needed.
 
 ## Generation APIs
 
-### `POST /projects/{id}/generate`
-Auth optional for server-demo generation. Guest ownership is validated by guest cookie.
+### `POST /projects/{id}/generations`
+Authenticated project owner only. Performs one synchronous Gemini request using
+the project's protected source image. Body is optional:
 
-Headers optional for authenticated BYOK only:
-- `X-Gemini-Api-Key` for BYOK
-
-Body:
 ```json
-{
-  "credentialMode": "SERVER_DEMO"
-}
-```
-or
-```json
-{
-  "credentialMode": "BYOK"
-}
+{"instruction":"Keep the navigation dark and preserve responsive behavior."}
 ```
 
-Response may be synchronous initially if provider latency is acceptable; UI must still show generation status. If later changed to async polling, preserve service contract through explicit run resource.
+Returns `201 Created` with status, provider/model metadata, summary, timestamps,
+and validated generated files. Missing source returns `409 SOURCE_IMAGE_REQUIRED`.
+Provider/configuration failures and invalid structured output use sanitized API
+errors and leave a persisted `FAILED` generation record.
 
-Recommended response:
-```json
-{
-  "runId": "uuid",
-  "status": "SUCCESS",
-  "versionNumber": 1,
-  "files": {"src/App.tsx":"..."},
-  "summary": "...",
-  "warnings": []
-}
-```
+### `GET /projects/{id}/generations/latest`
+Authenticated project owner only. Returns the newest successful generation and
+its files so Workspace reload does not call Gemini. Returns
+`404 GENERATION_NOT_FOUND` when no successful generation exists.
+
+Phase 4A supports server-configured Gemini generation for registered users. The
+guest/BYOK/quota contracts described later remain future work.
 
 ### `POST /projects/{id}/refine`
 Auth optional for server-demo refinement while guest quota remains.

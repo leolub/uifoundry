@@ -62,8 +62,8 @@ export function LoginPage() {
                 The access token was verified through <code className="text-text">/api/v1/auth/me</code> for{' '}
                 <strong className="font-medium text-text">{currentUser.email}</strong>.
               </p>
-              <a className="mt-8 inline-flex bg-primary px-5 py-3 font-semibold hover:bg-primary-hover" href="/">
-                Return home
+              <a className="mt-8 inline-flex bg-primary px-5 py-3 font-semibold hover:bg-primary-hover" href="/projects">
+                Open dashboard
               </a>
             </div>
           ) : (

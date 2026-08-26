@@ -14,6 +14,16 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(ProjectNotFoundException.class)
+    ResponseEntity<ApiError> handleProjectNotFound(
+            ProjectNotFoundException exception, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiError(
+                "PROJECT_NOT_FOUND",
+                exception.getMessage(),
+                request.getRequestId(),
+                null));
+    }
+
     @ExceptionHandler(InvalidCredentialsException.class)
     ResponseEntity<ApiError> handleInvalidCredentials(
             InvalidCredentialsException exception, HttpServletRequest request) {

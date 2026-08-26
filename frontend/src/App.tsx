@@ -1,6 +1,9 @@
 import { ArrowRight, Code2, Frame, Image, PanelsTopLeft } from 'lucide-react'
 import { RegisterPage } from './features/auth/RegisterPage'
 import { LoginPage } from './features/auth/LoginPage'
+import { RequireAuth } from './auth/RequireAuth'
+import { DashboardPage } from './features/projects/DashboardPage'
+import { WorkspacePage } from './features/workspace/WorkspacePage'
 
 const inputModes = [
   { label: 'Screenshot', description: 'Upload, drop, or paste an image.', icon: Image },
@@ -10,11 +13,19 @@ const inputModes = [
 ]
 
 function App() {
+  const workspaceMatch = window.location.pathname.match(/^\/projects\/([0-9a-f-]+)$/i)
+
   if (window.location.pathname === '/register') {
     return <RegisterPage />
   }
   if (window.location.pathname === '/login') {
     return <LoginPage />
+  }
+  if (window.location.pathname === '/projects') {
+    return <RequireAuth><DashboardPage /></RequireAuth>
+  }
+  if (workspaceMatch) {
+    return <RequireAuth><WorkspacePage projectId={workspaceMatch[1]} /></RequireAuth>
   }
 
   return (

@@ -14,3 +14,9 @@ spring:
 logging:
   level:
     org.springframework: WARN
+
+app:
+  frontend-origin: http://localhost:5173
+  jwt:
+    secret: uifoundry-test-jwt-secret-with-at-least-32-bytes
+    access-token-expiration-seconds: 3600

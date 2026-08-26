@@ -14,6 +14,16 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    ResponseEntity<ApiError> handleInvalidCredentials(
+            InvalidCredentialsException exception, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiError(
+                "INVALID_CREDENTIALS",
+                exception.getMessage(),
+                request.getRequestId(),
+                null));
+    }
+
     @ExceptionHandler(DuplicateEmailException.class)
     ResponseEntity<ApiError> handleDuplicateEmail(
             DuplicateEmailException exception, HttpServletRequest request) {

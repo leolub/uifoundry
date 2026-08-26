@@ -1,5 +1,6 @@
 import { ArrowRight, Code2, Frame, Image, PanelsTopLeft } from 'lucide-react'
 import { RegisterPage } from './features/auth/RegisterPage'
+import { LoginPage } from './features/auth/LoginPage'
 
 const inputModes = [
   { label: 'Screenshot', description: 'Upload, drop, or paste an image.', icon: Image },
@@ -12,6 +13,9 @@ function App() {
   if (window.location.pathname === '/register') {
     return <RegisterPage />
   }
+  if (window.location.pathname === '/login') {
+    return <LoginPage />
+  }
 
   return (
     <main className="min-h-screen bg-bg text-text">
@@ -21,9 +25,7 @@ function App() {
             <span className="grid size-9 place-items-center bg-primary text-sm font-black">FF</span>
             UIFoundry
           </a>
-          <span className="border border-border px-3 py-1.5 text-xs text-text-muted">
-            Phase 1 scaffold
-          </span>
+          <a className="border border-border px-3 py-1.5 text-xs text-text-muted hover:text-text" href="/login">Sign in</a>
         </div>
       </nav>
 

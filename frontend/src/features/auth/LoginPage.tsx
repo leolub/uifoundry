@@ -1,32 +1,27 @@
 import { FormEvent, useState } from 'react'
-import { ArrowLeft, Check, Hammer } from 'lucide-react'
-import { registerUser, type RegisteredUser } from '../../services/api/auth'
+import { ArrowLeft, Check, KeyRound } from 'lucide-react'
+import { useAuth } from '../../auth/useAuth'
 
-export function RegisterPage() {
+export function LoginPage() {
+  const { currentUser, isAuthenticated, isInitializing, login } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [registeredUser, setRegisteredUser] = useState<RegisteredUser | null>(null)
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError('')
-
-    if (!email.trim()) {
-      setError('Enter your email address.')
-      return
-    }
-    if (password.length < 8 || password.length > 72) {
-      setError('Password must be between 8 and 72 characters.')
+    if (!email.trim() || !password) {
+      setError('Enter your email and password.')
       return
     }
 
     setIsSubmitting(true)
     try {
-      setRegisteredUser(await registerUser(email, password))
-    } catch (registrationError) {
-      setError(registrationError instanceof Error ? registrationError.message : 'Registration failed.')
+      await login(email, password)
+    } catch (loginError) {
+      setError(loginError instanceof Error ? loginError.message : 'Login failed.')
     } finally {
       setIsSubmitting(false)
     }
@@ -40,15 +35,15 @@ export function RegisterPage() {
           UIFoundry
         </a>
         <div>
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent-cyan">Persistent workspace</p>
+          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent-cyan">Secure workspace access</p>
           <h1 className="mt-5 max-w-lg text-5xl font-black leading-none tracking-[-0.04em]">
-            Keep every interface you forge.
+            Return to your foundry.
           </h1>
           <p className="mt-6 max-w-md leading-7 text-text-muted">
-            Create an account for durable projects and version history. Registration never blocks the guest demo.
+            Sign in to verify your identity and continue with persistent projects in this browser session.
           </p>
         </div>
-        <p className="font-mono text-xs text-text-muted">REACT · SPRING BOOT · POSTGRESQL</p>
+        <p className="font-mono text-xs text-text-muted">JWT ACCESS TOKEN · STATELESS API</p>
       </section>
 
       <section className="flex items-center justify-center px-6 py-12">
@@ -57,22 +52,25 @@ export function RegisterPage() {
             <ArrowLeft size={16} /> Back to UIFoundry
           </a>
 
-          {registeredUser ? (
+          {isInitializing ? (
+            <p className="border border-border bg-surface-1 p-6 text-text-muted">Checking your session…</p>
+          ) : isAuthenticated && currentUser ? (
             <div className="border border-border bg-surface-1 p-8" role="status">
               <span className="grid size-11 place-items-center bg-success text-black"><Check size={22} /></span>
-              <h1 className="mt-7 text-3xl font-bold tracking-tight">Account created.</h1>
+              <h1 className="mt-7 text-3xl font-bold tracking-tight">Authenticated.</h1>
               <p className="mt-3 leading-7 text-text-muted">
-                <strong className="font-medium text-text">{registeredUser.email}</strong> is ready. You can now sign in to verify the account.
+                The access token was verified through <code className="text-text">/api/v1/auth/me</code> for{' '}
+                <strong className="font-medium text-text">{currentUser.email}</strong>.
               </p>
-              <a className="mt-8 inline-flex bg-primary px-5 py-3 font-semibold hover:bg-primary-hover" href="/login">
-                Continue to sign in
+              <a className="mt-8 inline-flex bg-primary px-5 py-3 font-semibold hover:bg-primary-hover" href="/">
+                Return home
               </a>
             </div>
           ) : (
             <>
-              <Hammer className="mb-6 text-primary" size={30} />
-              <h1 className="text-4xl font-black tracking-[-0.03em]">Create your account</h1>
-              <p className="mt-3 text-text-muted">Use email and a password of 8–72 characters.</p>
+              <KeyRound className="mb-6 text-primary" size={30} />
+              <h1 className="text-4xl font-black tracking-[-0.03em]">Sign in</h1>
+              <p className="mt-3 text-text-muted">Use the account you created in UIFoundry.</p>
 
               <form className="mt-9 space-y-6" onSubmit={handleSubmit} noValidate>
                 <label className="block">
@@ -90,10 +88,8 @@ export function RegisterPage() {
                 <label className="block">
                   <span className="mb-2 block text-sm font-medium">Password</span>
                   <input
-                    autoComplete="new-password"
+                    autoComplete="current-password"
                     className="w-full border border-border bg-surface-1 px-4 py-3 text-text outline-none focus:border-primary"
-                    minLength={8}
-                    maxLength={72}
                     onChange={(event) => setPassword(event.target.value)}
                     required
                     type="password"
@@ -110,9 +106,13 @@ export function RegisterPage() {
                   disabled={isSubmitting}
                   type="submit"
                 >
-                  {isSubmitting ? 'Creating account…' : 'Create account'}
+                  {isSubmitting ? 'Signing in…' : 'Sign in'}
                 </button>
               </form>
+
+              <p className="mt-6 text-sm text-text-muted">
+                Need an account? <a className="text-text underline underline-offset-4" href="/register">Register</a>
+              </p>
             </>
           )}
         </div>

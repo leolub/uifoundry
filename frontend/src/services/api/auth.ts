@@ -1,29 +1,34 @@
-export type RegisteredUser = {
+import { apiRequest } from './client'
+
+export type CurrentUser = {
   id: string
   email: string
   createdAt: string
 }
 
-type ApiError = {
-  code?: string
-  message?: string
-  details?: Record<string, string>
+export type RegisteredUser = CurrentUser
+
+export type LoginResponse = {
+  accessToken: string
+  tokenType: 'Bearer'
+  expiresIn: number
+  user: CurrentUser
 }
 
-const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080').replace(/\/$/, '')
-
 export async function registerUser(email: string, password: string): Promise<RegisteredUser> {
-  const response = await fetch(`${apiBaseUrl}/api/v1/auth/register`, {
+  return apiRequest<RegisteredUser>('/api/v1/auth/register', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
   })
+}
 
-  if (!response.ok) {
-    const error = (await response.json().catch(() => null)) as ApiError | null
-    const fieldMessage = error?.details && Object.values(error.details)[0]
-    throw new Error(fieldMessage ?? error?.message ?? 'Registration failed. Please try again.')
-  }
+export async function loginUser(email: string, password: string): Promise<LoginResponse> {
+  return apiRequest<LoginResponse>('/api/v1/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  })
+}
 
-  return response.json() as Promise<RegisteredUser>
+export async function getCurrentUser(): Promise<CurrentUser> {
+  return apiRequest<CurrentUser>('/api/v1/auth/me')
 }

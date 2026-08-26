@@ -18,6 +18,15 @@ Request:
 ```json
 {"email":"user@example.com","password":"..."}
 ```
+Response:
+```json
+{
+  "accessToken": "...",
+  "tokenType": "Bearer",
+  "expiresIn": 3600,
+  "user": {"id": "uuid", "email": "user@example.com", "createdAt": "..."}
+}
+```
 
 ### `POST /auth/refresh`
 Uses refresh token cookie.
@@ -26,7 +35,7 @@ Uses refresh token cookie.
 Revokes refresh token and clears cookie.
 
 ### `GET /auth/me`
-Returns current user.
+Requires `Authorization: Bearer <accessToken>` and returns the current safe user profile.
 
 ## Public examples
 

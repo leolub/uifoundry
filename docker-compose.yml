@@ -22,6 +22,8 @@ services:
       DATABASE_USERNAME: ${DATABASE_USERNAME:-uifoundry}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-uifoundry_local_only}
       FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
+      JWT_SECRET: ${JWT_SECRET:-uifoundry-local-development-secret-change-before-production}
+      JWT_ACCESS_TOKEN_EXPIRATION: ${JWT_ACCESS_TOKEN_EXPIRATION:-3600}
     ports:
       - "8080:8080"
     depends_on:
@@ -40,4 +42,3 @@ services:
 
 volumes:
   uifoundry_postgres:
-

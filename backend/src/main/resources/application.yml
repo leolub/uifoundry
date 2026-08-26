@@ -9,6 +9,10 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: validate
+  servlet:
+    multipart:
+      max-file-size: ${UIFOUNDRY_MAX_UPLOAD_SIZE:10MB}
+      max-request-size: ${UIFOUNDRY_MAX_UPLOAD_SIZE:10MB}
 
 server:
   port: ${PORT:8080}
@@ -20,3 +24,6 @@ app:
   jwt:
     secret: ${JWT_SECRET:uifoundry-local-development-secret-change-before-production}
     access-token-expiration-seconds: ${JWT_ACCESS_TOKEN_EXPIRATION:3600}
+  storage:
+    source-images-directory: ${UIFOUNDRY_STORAGE_DIR:./storage/source-images}
+    max-source-image-size-bytes: ${UIFOUNDRY_MAX_UPLOAD_BYTES:10485760}

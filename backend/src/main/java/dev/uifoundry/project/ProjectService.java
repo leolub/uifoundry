@@ -10,6 +10,7 @@ import dev.uifoundry.common.exception.ProjectNotFoundException;
 import dev.uifoundry.project.dto.CreateProjectRequest;
 import dev.uifoundry.project.dto.ProjectResponse;
 import dev.uifoundry.project.dto.RenameProjectRequest;
+import dev.uifoundry.source.ProjectSourceService;
 import dev.uifoundry.user.UserRepository;
 
 @Service
@@ -17,10 +18,13 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final ProjectSourceService sourceService;
 
-    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository) {
+    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository,
+            ProjectSourceService sourceService) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
+        this.sourceService = sourceService;
     }
 
     @Transactional
@@ -51,6 +55,7 @@ public class ProjectService {
     @Transactional
     public void delete(UUID ownerId, UUID projectId) {
         Project project = findOwnedProject(ownerId, projectId);
+        sourceService.deleteForProject(projectId);
         projectRepository.delete(project);
     }
 

@@ -24,6 +24,11 @@ services:
       FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
       JWT_SECRET: ${JWT_SECRET:-uifoundry-local-development-secret-change-before-production}
       JWT_ACCESS_TOKEN_EXPIRATION: ${JWT_ACCESS_TOKEN_EXPIRATION:-3600}
+      UIFOUNDRY_STORAGE_DIR: /data/source-images
+      UIFOUNDRY_MAX_UPLOAD_SIZE: ${UIFOUNDRY_MAX_UPLOAD_SIZE:-10MB}
+      UIFOUNDRY_MAX_UPLOAD_BYTES: ${UIFOUNDRY_MAX_UPLOAD_BYTES:-10485760}
+    volumes:
+      - uifoundry_source_images:/data/source-images
     ports:
       - "8080:8080"
     depends_on:
@@ -42,3 +47,4 @@ services:
 
 volumes:
   uifoundry_postgres:
+  uifoundry_source_images:

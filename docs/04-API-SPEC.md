@@ -77,10 +77,25 @@ Owner only; supports registered or matching guest owner.
 
 ## Input APIs
 
-### `POST /projects/{id}/input/image`
-Multipart.
-- `file`
-- `mode=IMAGE|WIREFRAME`
+Phase 3B supports authenticated `IMAGE_UPLOAD` sources through these endpoints:
+
+### `PUT /projects/{id}/source-image`
+Owner-only `multipart/form-data` upload or replacement with a `file` field.
+Accepts PNG, JPEG, and WebP up to the configured limit (10 MB by default).
+
+### `GET /projects/{id}/source-image`
+Returns safe source metadata. It never returns a storage key or filesystem path.
+
+### `GET /projects/{id}/source-image/content`
+Returns the protected image bytes with their persisted content type. Clients must
+send the Bearer token; the endpoint is not public.
+
+### `DELETE /projects/{id}/source-image`
+Deletes source metadata and the stored image.
+
+All four endpoints return ownership-safe `404` responses for projects owned by a
+different authenticated user. Website, Figma, and wireframe endpoints below are
+future contracts and are not implemented in Phase 3B.
 
 ### `POST /projects/{id}/input/website`
 ```json

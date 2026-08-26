@@ -20,3 +20,6 @@ app:
   jwt:
     secret: uifoundry-test-jwt-secret-with-at-least-32-bytes
     access-token-expiration-seconds: 3600
+  storage:
+    source-images-directory: ${java.io.tmpdir}/uifoundry-test-source-images
+    max-source-image-size-bytes: 32

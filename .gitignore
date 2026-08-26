@@ -14,5 +14,7 @@ frontend/.vite/
 *.tsbuildinfo
 
 backend/target/
+/storage/
+/backend/storage/
 
 *.log

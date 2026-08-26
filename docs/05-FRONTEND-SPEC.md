@@ -58,6 +58,11 @@ The card selection uses a red hard accent line/block, not a glow.
 
 ## 3. Workspace
 
+Current Phase 3B behavior supports `IMAGE_UPLOAD` only. The Source panel accepts
+PNG/JPEG/WebP through a file picker, drag/drop, or clipboard paste. Protected
+image content is fetched with the authenticated API client as a Blob and rendered
+through a revocable object URL. Website and Figma inputs remain future phases.
+
 Recommended desktop layout:
 
 ```text

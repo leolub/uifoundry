@@ -55,24 +55,28 @@ Indexes:
 - partial/index on `is_public_example`
 - index on `expires_at` for cleanup job
 
-## 4. `project_inputs`
+## 4. `project_sources`
 
-One active normalized input per project in V1.
+One active normalized visual source per project in V1. Phase 3B implements only
+`IMAGE_UPLOAD`; Website and Figma sources remain future phases. Image bytes are
+stored outside PostgreSQL.
 
 | Column | Type | Notes |
 |---|---|---|
 | id | uuid PK | |
-| project_id | uuid FK unique | |
-| source_type | varchar | |
-| original_reference | text nullable | URL/Figma link/file name |
-| normalized_asset_key | text | R2 object key |
+| project_id | uuid FK unique | cascades on project deletion |
+| source_type | varchar | currently `IMAGE_UPLOAD` |
+| storage_key | varchar unique | generated opaque storage key; never returned by API |
+| original_filename | varchar | metadata only, never used as a filesystem path |
 | content_type | varchar | |
-| width | int | |
-| height | int | |
-| metadata_json | jsonb | URL viewport/Figma node/etc. |
+| size_bytes | bigint | positive file size |
 | created_at | timestamptz | |
+| updated_at | timestamptz | |
 
-Never store Figma PAT or AI API key in metadata.
+The current local adapter stores files under a configurable ignored directory.
+The same `storage_key` boundary can later address Cloudflare R2 without changing
+the controller or persisted public metadata. Never store Figma PAT or AI API key
+in source metadata.
 
 ## 5. `project_versions`
 

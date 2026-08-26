@@ -24,8 +24,18 @@ export const tokenStorage = {
 }
 
 export async function apiRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const response = await apiFetch(path, init)
+
+  if (response.status === 204) {
+    return undefined as T
+  }
+
+  return response.json() as Promise<T>
+}
+
+export async function apiFetch(path: string, init: RequestInit = {}): Promise<Response> {
   const headers = new Headers(init.headers)
-  if (init.body && !headers.has('Content-Type')) {
+  if (init.body && !(init.body instanceof FormData) && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json')
   }
 
@@ -45,9 +55,5 @@ export async function apiRequest<T>(path: string, init: RequestInit = {}): Promi
     )
   }
 
-  if (response.status === 204) {
-    return undefined as T
-  }
-
-  return response.json() as Promise<T>
+  return response
 }

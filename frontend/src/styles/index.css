@@ -41,6 +41,7 @@
   .bg-surface-1 { background-color: var(--surface-1); }
   .bg-surface-2 { background-color: var(--surface-2); }
   .bg-primary { background-color: var(--primary); }
+  .bg-success { background-color: var(--success); }
   .hover\:bg-primary-hover:hover { background-color: var(--primary-hover); }
   .text-text { color: var(--text); }
   .text-text-muted { color: var(--text-muted); }
@@ -49,4 +50,3 @@
   .text-success { color: var(--success); }
   .border-border { border-color: var(--border); }
 }
-

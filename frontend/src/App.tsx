@@ -1,4 +1,5 @@
 import { ArrowRight, Code2, Frame, Image, PanelsTopLeft } from 'lucide-react'
+import { RegisterPage } from './features/auth/RegisterPage'
 
 const inputModes = [
   { label: 'Screenshot', description: 'Upload, drop, or paste an image.', icon: Image },
@@ -8,6 +9,10 @@ const inputModes = [
 ]
 
 function App() {
+  if (window.location.pathname === '/register') {
+    return <RegisterPage />
+  }
+
   return (
     <main className="min-h-screen bg-bg text-text">
       <nav className="border-b border-border bg-surface-1">
@@ -35,9 +40,9 @@ function App() {
             and Tailwind files, then keeps them editable, previewable, and versioned.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-4">
-            <button className="inline-flex items-center gap-2 bg-primary px-5 py-3 font-semibold transition-colors hover:bg-primary-hover">
-              Try without an account <ArrowRight size={18} />
-            </button>
+            <a className="inline-flex items-center gap-2 bg-primary px-5 py-3 font-semibold transition-colors hover:bg-primary-hover" href="/register">
+              Create an account <ArrowRight size={18} />
+            </a>
             <span className="text-sm text-text-muted">3 free generations · temporary for 24 hours</span>
           </div>
         </div>
@@ -80,4 +85,3 @@ function App() {
 }
 
 export default App
-

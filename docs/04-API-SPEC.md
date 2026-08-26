@@ -6,7 +6,7 @@ Exact DTO names may vary, but endpoint semantics are frozen.
 
 ## Auth
 
-### `POST /auth/register`
+### `POST /api/v1/auth/register`
 Request:
 ```json
 {"email":"user@example.com","password":"...","displayName":"User"}

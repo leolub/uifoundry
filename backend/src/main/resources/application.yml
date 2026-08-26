@@ -15,3 +15,5 @@ server:
   error:
     include-stacktrace: never
 
+app:
+  frontend-origin: ${FRONTEND_ORIGIN:http://localhost:5173}
